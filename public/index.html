@@ -179,14 +179,16 @@ function buildRecord(pin14,taxYear,bavRaw,colIdx,d){
   var ac=acRaw==='No Central A/C'?'No':(acRaw!==''?'Yes':'');
   var unitsRaw=sv(chars&&chars.num_apartments);
   var units=(!unitsRaw||unitsRaw==='None')?'1':unitsRaw;
-  var fp=sv(chars&&chars.num_fireplaces);fp=(fp&&fp!=='0')?fp:'';
+  var fp=sv(chars&&chars.num_fireplaces);fp=(fp&&fp!=='0')?String(Math.round(parseFloat(fp))):'';
+  var landSqft=sv(chars&&chars.land_sqft);landSqft=landSqft?String(Math.round(parseFloat(landSqft))):'';
+  var bldgSqft=sv(chars&&chars.building_sqft);bldgSqft=bldgSqft?String(Math.round(parseFloat(bldgSqft))):'';
   var land=parseFloat(sv(asr&&asr.certified_land))||0;
   var impr,total;
   if(isSubj){var bav=parseFloat(String(bavRaw||'').replace(/[$,]/g,''))||0;impr=bav;total=bav+land;}
   else{impr=parseFloat(sv(asr&&asr.certified_bldg))||0;total=parseFloat(sv(asr&&asr.certified_tot))||0;}
   var imprSF='';
   if(impr&&sqft)imprSF=fmtMoneyDec(impr/sqft);
-  return{pin:dashPIN(pin14),address:address,nbhd:sv(asr&&asr.neighborhood_code),prox:'N/A',land_sqft:sv(chars&&chars.land_sqft),design:sv(chars&&chars.type_of_residence),class_:sv(asr&&asr.class),exterior:sv(chars&&chars.ext_wall_material),units:units,age:age,baths:baths,bldg_sqft:sv(chars&&chars.building_sqft),bsmt:sv(chars&&chars.basement_type),fin_bsmt:'N/A',ac:ac,fireplace:fp,garage:sv(chars&&chars.garage_size),other:'',sale_date:'',sale_price:'',price_sqft:'',land_assmt:fmtMoney(land),impr_assmt:impr?fmtMoney(impr):'',total_assmt:total?fmtMoney(total):'',impr_sqft:imprSF};
+  return{pin:dashPIN(pin14),address:address,nbhd:sv(asr&&asr.neighborhood_code),prox:'N/A',land_sqft:landSqft,design:sv(chars&&chars.type_of_residence),class_:sv(asr&&asr.class),exterior:sv(chars&&chars.ext_wall_material),units:units,age:age,baths:baths,bldg_sqft:bldgSqft,bsmt:sv(chars&&chars.basement_type),fin_bsmt:'N/A',ac:ac,fireplace:fp,garage:sv(chars&&chars.garage_size),other:'',sale_date:'',sale_price:'',price_sqft:'',land_assmt:fmtMoney(land),impr_assmt:impr?fmtMoney(impr):'',total_assmt:total?fmtMoney(total):'',impr_sqft:imprSF};
 }
 
 function buildInput(){
